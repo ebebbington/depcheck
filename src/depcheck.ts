@@ -95,6 +95,7 @@ function gatherImportsFromDepContent(
         if (imports.filter((imp) => imp.name === theImport).length >= 1) {
           console.warn(colours.red(`${theImport} is used more than once`));
         } else {
+          theImport = theImport.replace(" ", "")
           imports.push({
             name: theImport,
             isUsed: false,
