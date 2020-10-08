@@ -1,2 +1,2 @@
-import { b } from "./deps.ts"
-import { a, anotherThing } from "./deps.ts"
+import { b } from "./deps.ts";
+import { a, anotherThing } from "./deps.ts";

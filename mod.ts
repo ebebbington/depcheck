@@ -1,1 +1,1 @@
-import "./src/depcheck.ts"
+import "./src/depcheck.ts";
