@@ -1,5 +1,5 @@
 <p align="center">
-  <!--<img height="200" src="./logo.pg" alt="depcheck logo">-->
+  <img height="200" src="./logo.png" alt="depcheck logo">
   <h1 align="center">depcheck</h1>
 </p>
 <p align="center">Check for unused dependencies</p>
