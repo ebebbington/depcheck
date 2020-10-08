@@ -17,7 +17,6 @@ Rhum.testPlan("tests/depcheck_test.ts", () => {
   Rhum.beforeEach(async () => {
     await resetExampleProjectDir();
   });
-
   Rhum.testSuite("Running with no args", () => {
     Rhum.testCase(
       "Warnings about unused dependencies are correct",
