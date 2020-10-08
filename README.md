@@ -14,6 +14,8 @@
 
 ---
 
+**depcheck**, inspired by NPM's `depcheck`.
+
 ## Table of Contents
 - [Quick Start](#quick-start)
 - [Documentation](#documentation)

@@ -19,7 +19,8 @@ jobs:
         uses: denolib/setup-deno@master
 
       - name: Tests
-        run: deno test -A tests
+        run: |
+          deno test -A tests/depcheck_test.ts
 
   linter:
     # Only one OS is required since fmt is cross platform
