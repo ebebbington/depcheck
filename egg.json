@@ -1,0 +1,16 @@
+{
+  "name": "depcheck",
+  "description": "Checks for unused dependencies",
+  "version": "1.0.0",
+  "stable": true,
+  "repository": "https://github.com/ebebbington/depcheck",
+  "files": [
+    "./mod.ts",
+    "./deps.ts",
+    "./src/depcheck.ts",
+    "./README.md"
+  ],
+  "entry": "./mod.ts",
+  "checkAll": false,
+  "unlisted": false
+}
