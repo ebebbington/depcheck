@@ -3,7 +3,7 @@ import { colours } from "../deps.ts";
 const decoder = new TextDecoder();
 const encoder = new TextEncoder();
 
-type Imports = Array<{ name: string; isUsed: boolean; file: string }>;
+type Imports = Array<{ name: string; isUsed: boolean; file: string, regex: RegExp }>;
 
 /**
  * Checks if a `test` or `tests` directory exists, if either exist, it will return the name
@@ -66,6 +66,7 @@ function gatherImportsFromDepContent(
           name: theImport,
           isUsed: false,
           file: fileImportsExtractedFrom,
+          regex: new RegExp("  " + theImport)
         });
       }
     }
@@ -80,6 +81,7 @@ function gatherImportsFromDepContent(
           name: theImport,
           isUsed: false,
           file: fileImportsExtractedFrom,
+          regex: new RegExp("export * from " + theImport)
         });
       }
     }
@@ -100,6 +102,7 @@ function gatherImportsFromDepContent(
             name: theImport,
             isUsed: false,
             file: fileImportsExtractedFrom,
+            regex: new RegExp(theImport)
           });
         }
       });
@@ -206,10 +209,21 @@ allImports.forEach((imp) => {
 if (args[0] === "--clean") {
   allImports.forEach((imp) => {
     if (imp.isUsed === false) {
-      let fileContent = decoder.decode(Deno.readFileSync(imp.file));
-      const regex = new RegExp(`  ${imp.name},?`);
-      fileContent = fileContent.replace(regex, "");
-      Deno.writeFileSync(imp.file, encoder.encode(fileContent));
+      let fileContent = decoder.decode(Deno.readFileSync(imp.file)).split("\n");
+      fileContent.forEach((line, i) => {
+        if (line.match(imp.regex)) {
+          fileContent.splice(i, 1)
+        }
+      })
+      // cleanup empty lines at top of file
+      while (true) {
+        if (fileContent[0] === "") {
+          fileContent.splice(0, 1)
+        } else {
+          break
+        }
+      }
+      Deno.writeFileSync(imp.file, encoder.encode(fileContent.join("\n")));
     }
   });
   console.info(colours.green("Cleaned up all unused imports"));
