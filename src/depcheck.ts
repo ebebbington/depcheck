@@ -37,6 +37,7 @@ function gatherImportsFromDepContent(
   lines: string[],
   fileImportsExtractedFrom: string,
 ): Imports {
+  // deno-lint-ignore allow-no-regex-spaces
   const namedImportRegexOnNewline = /  [a-zA-Z0-9]*[^,]/; // "  someModule," = matches "someModule". Matches the words/numbers, relies on file being formatted
   const defaultImportRegex = /export \* as [a-zA-Z0-9]*/;
   const namedRegexOnSameLine = /{ .* }/; // will return "{ a }" or "{ a, b }"
