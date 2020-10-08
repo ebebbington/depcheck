@@ -3,7 +3,9 @@ import { colours } from "../deps.ts";
 const decoder = new TextDecoder();
 const encoder = new TextEncoder();
 
-type Imports = Array<{ name: string; isUsed: boolean; file: string, regex: RegExp }>;
+type Imports = Array<
+  { name: string; isUsed: boolean; file: string; regex: RegExp }
+>;
 
 /**
  * Checks if a `test` or `tests` directory exists, if either exist, it will return the name
@@ -66,7 +68,7 @@ function gatherImportsFromDepContent(
           name: theImport,
           isUsed: false,
           file: fileImportsExtractedFrom,
-          regex: new RegExp("  " + theImport)
+          regex: new RegExp("  " + theImport),
         });
       }
     }
@@ -81,7 +83,7 @@ function gatherImportsFromDepContent(
           name: theImport,
           isUsed: false,
           file: fileImportsExtractedFrom,
-          regex: new RegExp("export * from " + theImport)
+          regex: new RegExp("export * from " + theImport),
         });
       }
     }
@@ -97,12 +99,12 @@ function gatherImportsFromDepContent(
         if (imports.filter((imp) => imp.name === theImport).length >= 1) {
           console.warn(colours.red(`${theImport} is used more than once`));
         } else {
-          theImport = theImport.replace(" ", "")
+          theImport = theImport.replace(" ", "");
           imports.push({
             name: theImport,
             isUsed: false,
             file: fileImportsExtractedFrom,
-            regex: new RegExp(theImport)
+            regex: new RegExp(theImport),
           });
         }
       });
@@ -212,15 +214,15 @@ if (args[0] === "--clean") {
       let fileContent = decoder.decode(Deno.readFileSync(imp.file)).split("\n");
       fileContent.forEach((line, i) => {
         if (line.match(imp.regex)) {
-          fileContent.splice(i, 1)
+          fileContent.splice(i, 1);
         }
-      })
+      });
       // cleanup empty lines at top of file
       while (true) {
         if (fileContent[0] === "") {
-          fileContent.splice(0, 1)
+          fileContent.splice(0, 1);
         } else {
-          break
+          break;
         }
       }
       Deno.writeFileSync(imp.file, encoder.encode(fileContent.join("\n")));

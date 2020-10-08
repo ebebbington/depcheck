@@ -1,9 +1,15 @@
 import { Rhum } from "./deps.ts";
-import { colours } from "../deps.ts"
+import { colours } from "../deps.ts";
 
 function resetExampleProjectDir() {
-  Deno.copyFileSync("./tests/example_project_baseline/deps.ts", "tests/example_project/deps.ts")
-  Deno.copyFileSync("./tests/example_project_baseline/tests/deps.ts", "tests/example_project/tests/deps.ts")
+  Deno.copyFileSync(
+    "./tests/example_project_baseline/deps.ts",
+    "tests/example_project/deps.ts",
+  );
+  Deno.copyFileSync(
+    "./tests/example_project_baseline/tests/deps.ts",
+    "tests/example_project/tests/deps.ts",
+  );
 }
 
 Rhum.testPlan("tests/depcheck_test.ts", () => {
@@ -18,19 +24,28 @@ Rhum.testPlan("tests/depcheck_test.ts", () => {
           cmd: ["deno", "run", "--allow-read=.", "../../mod.ts"],
           cwd: "./tests/example_project",
           stdout: "piped",
-          stderr: "piped"
+          stderr: "piped",
         });
         const status = await p.status();
         const output = new TextDecoder().decode(await p.output());
-        const stderr = new TextDecoder().decode(await p.stderrOutput())
+        const stderr = new TextDecoder().decode(await p.stderrOutput());
         p.close();
-        Rhum.asserts.assertEquals(output, "")
-        Rhum.asserts.assertEquals(stderr,
-            colours.yellow('Import "byee" is unused, originating from "deps.ts"') + "\n" +
-            colours.yellow('Import "good" is unused, originating from "deps.ts"') + "\n" +
-            colours.yellow('Import "some" is unused, originating from "tests/deps.ts"') + "\n" +
-            colours.yellow('Import "something" is unused, originating from "tests/deps.ts"') + "\n"
-        )
+        Rhum.asserts.assertEquals(output, "");
+        Rhum.asserts.assertEquals(
+          stderr,
+          colours.yellow(
+            'Import "byee" is unused, originating from "deps.ts"',
+          ) + "\n" +
+            colours.yellow(
+              'Import "good" is unused, originating from "deps.ts"',
+            ) + "\n" +
+            colours.yellow(
+              'Import "some" is unused, originating from "tests/deps.ts"',
+            ) + "\n" +
+            colours.yellow(
+              'Import "something" is unused, originating from "tests/deps.ts"',
+            ) + "\n",
+        );
       },
     );
   });
@@ -48,23 +63,45 @@ Rhum.testPlan("tests/depcheck_test.ts", () => {
         ],
         cwd: "./tests/example_project",
         stdout: "piped",
-        stderr: "piped"
+        stderr: "piped",
       });
       const status = await p.status();
       const output = new TextDecoder().decode(await p.output());
-      const stderr = new TextDecoder().decode(await p.stderrOutput())
+      const stderr = new TextDecoder().decode(await p.stderrOutput());
       p.close();
-      Rhum.asserts.assertEquals(stderr,
-          colours.yellow('Import "byee" is unused, originating from "deps.ts"') + "\n" +
-          colours.yellow('Import "good" is unused, originating from "deps.ts"') + "\n" +
-          colours.yellow('Import "some" is unused, originating from "tests/deps.ts"') + "\n" +
-          colours.yellow('Import "something" is unused, originating from "tests/deps.ts"') + "\n"
-      )
-      Rhum.asserts.assertEquals(output, colours.green("Cleaned up all unused imports") + "\n")
-      const mainDepsFileContent = new TextDecoder().decode(await Deno.readFile("./tests/example_project/deps.ts"))
-      Rhum.asserts.assertEquals(mainDepsFileContent, "export { heloo } from \"hh\";\n\n")
-      const testDepsFileContent = new TextDecoder().decode(await Deno.readFile("./tests/example_project/tests/deps.ts"))
-      Rhum.asserts.assertEquals(testDepsFileContent, "export { a, b } from \"ffdd\";" + "\n\n" + "export * as anotherThing from \"abc\";\n")
+      Rhum.asserts.assertEquals(
+        stderr,
+        colours.yellow('Import "byee" is unused, originating from "deps.ts"') +
+          "\n" +
+          colours.yellow(
+            'Import "good" is unused, originating from "deps.ts"',
+          ) + "\n" +
+          colours.yellow(
+            'Import "some" is unused, originating from "tests/deps.ts"',
+          ) + "\n" +
+          colours.yellow(
+            'Import "something" is unused, originating from "tests/deps.ts"',
+          ) + "\n",
+      );
+      Rhum.asserts.assertEquals(
+        output,
+        colours.green("Cleaned up all unused imports") + "\n",
+      );
+      const mainDepsFileContent = new TextDecoder().decode(
+        await Deno.readFile("./tests/example_project/deps.ts"),
+      );
+      Rhum.asserts.assertEquals(
+        mainDepsFileContent,
+        'export { heloo } from "hh";\n\n',
+      );
+      const testDepsFileContent = new TextDecoder().decode(
+        await Deno.readFile("./tests/example_project/tests/deps.ts"),
+      );
+      Rhum.asserts.assertEquals(
+        testDepsFileContent,
+        'export { a, b } from "ffdd";' + "\n\n" +
+          'export * as anotherThing from "abc";\n',
+      );
     });
   });
 
@@ -81,20 +118,29 @@ Rhum.testPlan("tests/depcheck_test.ts", () => {
         ],
         cwd: "./tests/example_project",
         stdout: "piped",
-        stderr: "piped"
+        stderr: "piped",
       });
       const status = await p.status();
       const output = new TextDecoder().decode(await p.output());
-      const stderr = new TextDecoder().decode(await p.stderrOutput())
+      const stderr = new TextDecoder().decode(await p.stderrOutput());
       p.close();
-      Rhum.asserts.assertEquals(stderr,
-          "Checked 5 files" + "\n" +
-          colours.yellow('Import "byee" is unused, originating from "deps.ts"') + "\n" +
-          colours.yellow('Import "good" is unused, originating from "deps.ts"') + "\n" +
-          colours.yellow('Import "some" is unused, originating from "tests/deps.ts"') + "\n" +
-          colours.yellow('Import "something" is unused, originating from "tests/deps.ts"') + "\n"
-      )
-      Rhum.asserts.assertEquals(output, "")
+      Rhum.asserts.assertEquals(
+        stderr,
+        "Checked 5 files" + "\n" +
+          colours.yellow(
+            'Import "byee" is unused, originating from "deps.ts"',
+          ) + "\n" +
+          colours.yellow(
+            'Import "good" is unused, originating from "deps.ts"',
+          ) + "\n" +
+          colours.yellow(
+            'Import "some" is unused, originating from "tests/deps.ts"',
+          ) + "\n" +
+          colours.yellow(
+            'Import "something" is unused, originating from "tests/deps.ts"',
+          ) + "\n",
+      );
+      Rhum.asserts.assertEquals(output, "");
     });
   });
 
@@ -104,15 +150,18 @@ Rhum.testPlan("tests/depcheck_test.ts", () => {
         cmd: ["deno", "run", "--allow-read=.", "../../../mod.ts"],
         cwd: "./tests/example_project/src",
         stdout: "piped",
-        stderr: "piped"
+        stderr: "piped",
       });
       const status = await p.status();
       const output = new TextDecoder().decode(await p.output());
-      const stderr = new TextDecoder().decode(await p.stderrOutput())
+      const stderr = new TextDecoder().decode(await p.stderrOutput());
       p.close();
-      Rhum.asserts.assertEquals(stderr.indexOf("No such file or directory") > -1, true)
+      Rhum.asserts.assertEquals(
+        stderr.indexOf("No such file or directory") > -1,
+        true,
+      );
     });
   });
 });
 
-Rhum.run()
+Rhum.run();
