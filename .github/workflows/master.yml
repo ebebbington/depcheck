@@ -20,6 +20,7 @@ jobs:
 
       - name: Tests
         run: |
+          deno cache mod.ts
           deno test -A tests/depcheck_test.ts
 
   linter:
