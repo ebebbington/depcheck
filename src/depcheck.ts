@@ -163,7 +163,7 @@ const mainDepsContent = decoder.decode(Deno.readFileSync("./deps.ts")).split(
 );
 if ((mainDepsContent.length === 1 && mainDepsContent[0] === "") !== true) { // not empty
   // construct the imports
-  let mainImports: Imports = gatherImportsFromDepContent(
+  const mainImports: Imports = gatherImportsFromDepContent(
     mainDepsContent,
     "deps.ts",
   );
@@ -182,7 +182,7 @@ if (
   testDirName
 ) {
   // construct the imports
-  let testImports: Imports = gatherImportsFromDepContent(
+  const testImports: Imports = gatherImportsFromDepContent(
     testDepsContent,
     testDirName + "/deps.ts",
   );
@@ -211,7 +211,7 @@ allImports.forEach((imp) => {
 if (args[0] === "--clean") {
   allImports.forEach((imp) => {
     if (imp.isUsed === false) {
-      let fileContent = decoder.decode(Deno.readFileSync(imp.file)).split("\n");
+      const fileContent = decoder.decode(Deno.readFileSync(imp.file)).split("\n");
       fileContent.forEach((line, i) => {
         if (line.match(imp.regex)) {
           fileContent.splice(i, 1);
