@@ -49,8 +49,9 @@ $ deno run --allow-read='.' --allow-write='.' https://deno.land/x/depcheck/mod.t
 
 ### Format Your Code Before Checking
 ```
-$ deno run --allow-read='.' https://deno.land/x/depcheck/mod.ts --fmt
-$ deno run --allow-read='.' https://deno.land/x/depcheck/mod.ts --fmt --clean
+$ deno run --allow-read='.' --allow-run https://deno.land/x/depcheck/mod.ts --fmt
+or
+$ deno run --allow-read='.' --allow-run https://deno.land/x/depcheck/mod.ts --fmt --clean
 ```
 
 ## Contributing
