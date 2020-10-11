@@ -24,7 +24,7 @@
 
 ## Quick Start
 ```
-$ deno run --allow-read='.' https://deno.land/x/depcheck/mod.ts
+$ deno run --allow-read='.' https://deno.land/x/depcheck@v1.0.1/mod.ts
 ```
 
 ## Documentation
