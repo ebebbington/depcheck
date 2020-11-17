@@ -211,7 +211,9 @@ allImports.forEach((imp) => {
 if (args[0] === "--clean") {
   allImports.forEach((imp) => {
     if (imp.isUsed === false) {
-      const fileContent = decoder.decode(Deno.readFileSync(imp.file)).split("\n");
+      const fileContent = decoder.decode(Deno.readFileSync(imp.file)).split(
+        "\n",
+      );
       fileContent.forEach((line, i) => {
         if (line.match(imp.regex)) {
           fileContent.splice(i, 1);
