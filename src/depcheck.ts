@@ -124,14 +124,16 @@ async function iterateOverDirectoryAndCheckIfImportsAreUsed(
   imports: Imports,
 ): Promise<Imports> {
   for await (const dirEntry of Deno.readDir(dir)) {
+    // Ignore deps.ts files
     if (
-      dirEntry.name.indexOf(".ts") > 0 && dirEntry.name.indexOf("deps.ts") < 0
+      dirEntry.name.includes(".ts") &&
+      dirEntry.name.includes("deps.ts") === false
     ) {
       const fileContent = decoder.decode(
         Deno.readFileSync(dir + "/" + dirEntry.name),
       );
       imports.forEach((imp, i) => {
-        if (fileContent.indexOf(imp.name) > 0) {
+        if (fileContent.includes(imp.name)) {
           imports[i].isUsed = true;
         }
       });
