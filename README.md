@@ -8,9 +8,9 @@
     <img src="https://img.shields.io/github/release/ebebbington/depcheck.svg?color=bright_green&label=latest">
   </a>
   <a href="https://github.com/ebebbington/depcheck/actions">
-    <img src="https://img.shields.io/github/workflow/status/drashland/deno-drash/master?label=tests">
+    <img src="https://img.shields.io/github/workflow/status/ebebbington/depcheck/master?label=tests">
   </a>
-  <a href="https://github.com/drashland/depcheck/actions">
+  <a href="https://github.com/ebebbington/depcheck/actions">
     <img src="https://img.shields.io/github/workflow/status/ebebbington/depcheck/CodeQL?label=CodeQL">
   </a>
   <a href="https://sonarcloud.io/dashboard?id=ebebbington_depcheck">
