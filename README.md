@@ -10,6 +10,12 @@
   <a href="https://github.com/ebebbington/depcheck/actions">
     <img src="https://img.shields.io/github/workflow/status/drashland/deno-drash/master?label=tests">
   </a>
+  <a href="https://github.com/drashland/depcheck/actions">
+    <img src="https://img.shields.io/github/workflow/status/ebebbington/depcheck/CodeQL?label=CodeQL">
+  </a>
+  <a href="https://sonarcloud.io/dashboard?id=ebebbington_depcheck">
+    <img src="https://sonarcloud.io/api/project_badges/measure?project=ebebbington_depcheck&metric=alert_status">
+  </a>
 </p>
 
 ---
