@@ -12,6 +12,26 @@ function resetExampleProjectDir() {
   );
 }
 
+async function run(
+  cmd: string[],
+  cwd: string,
+): Promise<{ output: string; stderr: string }> {
+  const p = Deno.run({
+    cmd: cmd,
+    cwd: cwd,
+    stdout: "piped",
+    stderr: "piped",
+  });
+  await p.status();
+  const output = new TextDecoder().decode(await p.output());
+  const stderr = new TextDecoder().decode(await p.stderrOutput());
+  p.close();
+  return {
+    output,
+    stderr,
+  };
+}
+
 Rhum.testPlan("tests/depcheck_test.ts", () => {
   Rhum.afterEach(() => {
     resetExampleProjectDir();
@@ -20,16 +40,10 @@ Rhum.testPlan("tests/depcheck_test.ts", () => {
     Rhum.testCase(
       "Warnings about unused dependencies are correct",
       async () => {
-        const p = Deno.run({
-          cmd: ["deno", "run", "--allow-read=.", "../../mod.ts"],
-          cwd: "./tests/example_project",
-          stdout: "piped",
-          stderr: "piped",
-        });
-        const status = await p.status();
-        const output = new TextDecoder().decode(await p.output());
-        const stderr = new TextDecoder().decode(await p.stderrOutput());
-        p.close();
+        const { output, stderr } = await run(
+          ["deno", "run", "--allow-read=.", "../../mod.ts"],
+          "./tests/example_project",
+        );
         Rhum.asserts.assertEquals(output, "");
         Rhum.asserts.assertEquals(
           stderr,
@@ -52,23 +66,14 @@ Rhum.testPlan("tests/depcheck_test.ts", () => {
 
   Rhum.testSuite("Running with --clean", () => {
     Rhum.testCase("Removes the unused dependencies", async () => {
-      const p = Deno.run({
-        cmd: [
-          "deno",
-          "run",
-          "--allow-read=.",
-          "--allow-write=.",
-          "../../mod.ts",
-          "--clean",
-        ],
-        cwd: "./tests/example_project",
-        stdout: "piped",
-        stderr: "piped",
-      });
-      const status = await p.status();
-      const output = new TextDecoder().decode(await p.output());
-      const stderr = new TextDecoder().decode(await p.stderrOutput());
-      p.close();
+      const { output, stderr } = await run([
+        "deno",
+        "run",
+        "--allow-read=.",
+        "--allow-write=.",
+        "../../mod.ts",
+        "--clean",
+      ], "./tests/example_project");
       Rhum.asserts.assertEquals(
         stderr,
         colours.yellow('Import "byee" is unused, originating from "deps.ts"') +
@@ -120,7 +125,7 @@ Rhum.testPlan("tests/depcheck_test.ts", () => {
         stdout: "piped",
         stderr: "piped",
       });
-      const status = await p.status();
+      await p.status();
       const output = new TextDecoder().decode(await p.output());
       const stderr = new TextDecoder().decode(await p.stderrOutput());
       p.close();
@@ -152,8 +157,8 @@ Rhum.testPlan("tests/depcheck_test.ts", () => {
         stdout: "piped",
         stderr: "piped",
       });
-      const status = await p.status();
-      const output = new TextDecoder().decode(await p.output());
+      await p.status();
+      await p.output();
       const stderr = new TextDecoder().decode(await p.stderrOutput());
       p.close();
       Rhum.asserts.assertEquals(
