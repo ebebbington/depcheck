@@ -37,7 +37,7 @@ $ deno run --allow-read='.' https://deno.land/x/depcheck@v1.0.1/mod.ts
 
 ## Documentation
 
-**depcheck** checks for anny unused dependencies in your project. It will pull
+**depcheck** checks for any unused dependencies in your project. It will pull
 dependencies used in `deps.ts` and `tests/deps.ts` or `test/deps.ts`, and check
 if each one is used within your project.
 
