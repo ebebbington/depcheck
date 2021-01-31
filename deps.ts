@@ -1,1 +1,1 @@
-export * as colours from "https://deno.land/std@0.84.0/fmt/colors.ts";
+export * as colours from "https://deno.land/std@0.85.0/fmt/colors.ts";
