@@ -5,17 +5,12 @@ on:
 
 jobs:
   update-dep:
-    strategy:
-      matrix:
-        deno: ["1.4.3"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
       - name: Install Deno
         uses: denolib/setup-deno@master
-        with:
-          deno-version: ${{ matrix.deno }}
 
       - name: Update Dependencies
         run: |
