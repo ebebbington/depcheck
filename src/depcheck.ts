@@ -22,7 +22,7 @@ async function getTestDirectoryName(): Promise<string | null> {
     try {
       await Deno.stat("tests");
       return "tests";
-    } catch (_err) {
+    } catch (_errr) {
       // "tests" also doesn't exist
       return null;
     }
