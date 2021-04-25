@@ -17,12 +17,12 @@ async function getTestDirectoryName(): Promise<string | null> {
     await Deno.stat("test");
     // didn't fail, so it exists
     return "test";
-  } catch (err) {
+  } catch (_err) {
     // doesn't exist, try "tests"
     try {
       await Deno.stat("tests");
       return "tests";
-    } catch (err) {
+    } catch (_errr) {
       // "tests" also doesn't exist
       return null;
     }
