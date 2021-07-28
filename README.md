@@ -35,20 +35,15 @@
 $ deno run --allow-read='.' https://deno.land/x/depcheck@v1.0.1/mod.ts
 ```
 
+You can even use this as a step in your CI, as if unused dependencies are found,
+the process will fail.
+
 ## Documentation
 
 **depcheck** checks for any unused dependencies in your project. It will pull
-dependencies used in `deps.ts` and `tests/deps.ts` or `test/deps.ts` (if either
+dependencies used in `deps.ts` and `tests/deps.ts`/`test/deps.ts` (if either
 exist), and check if each one is used within your project, returning a response
 of if any dependencies are unused.
-
-## Contributing
-
-Contributors are welcomed!
-
-Please read through our [contributing guidelines](./.github/CONTRIBUTING.md).
-Included are directions for opening issues, coding standards, and notes on
-development.
 
 ## License
 

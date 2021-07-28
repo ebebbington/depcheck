@@ -46,11 +46,6 @@ function gatherImportsFromDepContent(
   const imports: Imports = [];
 
   lines.forEach((line) => {
-    // skip empty lines
-    if (line.trim() === "" || line.startsWith("//")) {
-      return;
-    }
-
     // Get imports
     const namedImportRegexOnNewLineMatch = line.match(
       namedImportRegexOnNewline,
@@ -59,32 +54,23 @@ function gatherImportsFromDepContent(
       namedImportRegexOnNewLineMatch && namedImportRegexOnNewLineMatch.length
     ) {
       const theImport = namedImportRegexOnNewLineMatch[0].replace("  ", "");
-      // BUT check if they we already have it, eg a user exports it twice
-      if (imports.filter((imp) => imp.name === theImport).length >= 1) {
-        console.warn(colours.red(`${theImport} is used more than once`));
-      } else {
-        imports.push({
-          name: theImport,
-          isUsed: false,
-          file: fileImportsExtractedFrom,
-          regex: new RegExp("  " + theImport),
-        });
-      }
+      imports.push({
+        name: theImport,
+        isUsed: false,
+        file: fileImportsExtractedFrom,
+        regex: new RegExp("  " + theImport),
+      });
     }
 
     const defaultImportRegexMatch = line.match(defaultImportRegex);
     if (defaultImportRegexMatch && defaultImportRegexMatch.length) {
       const theImport = defaultImportRegexMatch[0].replace("export * as ", "");
-      if (imports.filter((imp) => imp.name === theImport).length >= 1) {
-        console.warn(colours.red(`${theImport} is used more than once`));
-      } else {
-        imports.push({
-          name: theImport,
-          isUsed: false,
-          file: fileImportsExtractedFrom,
-          regex: new RegExp("export * from " + theImport),
-        });
-      }
+      imports.push({
+        name: theImport,
+        isUsed: false,
+        file: fileImportsExtractedFrom,
+        regex: new RegExp("export * from " + theImport),
+      });
     }
 
     const namedRegexOnSameLineMatch = line.match(namedRegexOnSameLine);
@@ -95,17 +81,13 @@ function gatherImportsFromDepContent(
         .replace(" ", "")
         .split(", ");
       theImports.forEach((theImport) => {
-        if (imports.filter((imp) => imp.name === theImport).length >= 1) {
-          console.warn(colours.red(`${theImport} is used more than once`));
-        } else {
-          theImport = theImport.replace(" ", "");
-          imports.push({
-            name: theImport,
-            isUsed: false,
-            file: fileImportsExtractedFrom,
-            regex: new RegExp(theImport),
-          });
-        }
+        theImport = theImport.replace(" ", "");
+        imports.push({
+          name: theImport,
+          isUsed: false,
+          file: fileImportsExtractedFrom,
+          regex: new RegExp(theImport),
+        });
       });
     }
   });
@@ -146,56 +128,53 @@ async function iterateOverDirectoryAndCheckIfImportsAreUsed(
   return imports;
 }
 
-let allImports: Imports = [];
+function getDepFileContent(filename: string): string[] {
+  const data = Deno.readFileSync(filename);
+  const dataStr = decoder.decode(data);
+  const content = dataStr.split(
+    "\n",
+    // Catch for an empty deps file, eg `mainDepsContent` is [""] when an empty file
+  ).filter((line) => line.trim() !== "" && line.startsWith("//"));
+  return content;
+}
 
-// Catch for an empty deps file, eg `mainDepsContent` is [""] when an empty file
-const mainDepsContent = decoder.decode(Deno.readFileSync("./deps.ts")).split(
-  "\n",
-);
-if ((mainDepsContent.length === 1 && mainDepsContent[0] === "") !== true) { // not empty
-  // construct the imports
-  const mainImports: Imports = gatherImportsFromDepContent(
-    mainDepsContent,
-    "deps.ts",
-  );
-  mainImports.forEach((mainImport) => {
-    allImports.push(mainImport);
-  });
+const allImports: Imports = [];
+
+const mainDepsContent = getDepFileContent("./deps.ts");
+for (
+  const mainImport of gatherImportsFromDepContent(mainDepsContent, "deps.ts")
+) {
+  allImports.push(mainImport);
 }
 
 // Catch for an empty deps file, eg `mainDepsContent` is [""] when an empty file
 const testDirName = await getTestDirectoryName();
 if (testDirName !== null) {
-  const testDepsContent = decoder.decode(
-    await Deno.readFile(`./${testDirName}/deps.ts`),
-  ).split("\n");
-  if (
-    (testDepsContent.length === 1 && testDepsContent[0] === "") !== true &&
-    testDirName
-  ) {
-    // construct the imports
-    const testImports: Imports = gatherImportsFromDepContent(
+  const testDepsContent = getDepFileContent(`./${testDirName}/deps.ts`);
+  for (
+    const testImport of gatherImportsFromDepContent(
       testDepsContent,
       testDirName + "/deps.ts",
-    );
-    testImports.forEach((testImport) => {
-      allImports.push(testImport);
-    });
+    )
+  ) {
+    allImports.push(testImport);
   }
 }
 
-allImports = await iterateOverDirectoryAndCheckIfImportsAreUsed(
-  ".",
-  allImports,
-);
+let hasUnusedImports = false;
 
-// check for any unused imports
-allImports.forEach((imp) => {
+for (
+  const imp
+    of (await iterateOverDirectoryAndCheckIfImportsAreUsed(".", allImports))
+) {
   if (imp.isUsed === false) {
+    hasUnusedImports = true;
     console.warn(
       colours.yellow(
         `Import "${imp.name}" is unused, originating from "${imp.file}"`,
       ),
     );
   }
-});
+}
+
+Deno.exit(hasUnusedImports === true ? 1 : 0);
