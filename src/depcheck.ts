@@ -47,7 +47,7 @@ function gatherImportsFromDepContent(
 
   lines.forEach((line) => {
     // skip empty lines
-    if (line === "") {
+    if (line.trim() === "" || line.startsWith("//")) {
       return;
     }
 
@@ -165,21 +165,23 @@ if ((mainDepsContent.length === 1 && mainDepsContent[0] === "") !== true) { // n
 
 // Catch for an empty deps file, eg `mainDepsContent` is [""] when an empty file
 const testDirName = await getTestDirectoryName();
-const testDepsContent = decoder.decode(
-  await Deno.readFile(`./${testDirName}/deps.ts`),
-).split("\n");
-if (
-  (testDepsContent.length === 1 && testDepsContent[0] === "") !== true &&
-  testDirName
-) {
-  // construct the imports
-  const testImports: Imports = gatherImportsFromDepContent(
-    testDepsContent,
-    testDirName + "/deps.ts",
-  );
-  testImports.forEach((testImport) => {
-    allImports.push(testImport);
-  });
+if (testDirName !== null) {
+  const testDepsContent = decoder.decode(
+    await Deno.readFile(`./${testDirName}/deps.ts`),
+  ).split("\n");
+  if (
+    (testDepsContent.length === 1 && testDepsContent[0] === "") !== true &&
+    testDirName
+  ) {
+    // construct the imports
+    const testImports: Imports = gatherImportsFromDepContent(
+      testDepsContent,
+      testDirName + "/deps.ts",
+    );
+    testImports.forEach((testImport) => {
+      allImports.push(testImport);
+    });
+  }
 }
 
 allImports = await iterateOverDirectoryAndCheckIfImportsAreUsed(
