@@ -35,9 +35,6 @@ jobs:
       - name: Install Deno
         uses: denolib/setup-deno@master
 
-      - name: eee
-        run: deno --version
-
       - name: Lint
         run: deno lint
 
