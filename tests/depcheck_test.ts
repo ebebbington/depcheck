@@ -1,49 +1,40 @@
 import { Rhum } from "./deps.ts";
 import { colours } from "../deps.ts";
 
-function resetExampleProjectDir() {
-  Deno.copyFileSync(
-    "./tests/example_project_baseline/deps.ts",
-    "tests/example_project/deps.ts",
-  );
-  Deno.copyFileSync(
-    "./tests/example_project_baseline/tests/deps.ts",
-    "tests/example_project/tests/deps.ts",
-  );
-}
-
 async function run(
   cmd: string[],
   cwd: string,
-): Promise<{ output: string; stderr: string }> {
+): Promise<
+  { output: string; stderr: string; status: { success: boolean; code: number } }
+> {
   const p = Deno.run({
     cmd: cmd,
     cwd: cwd,
     stdout: "piped",
     stderr: "piped",
   });
-  await p.status();
+  const status = await p.status();
   const output = new TextDecoder().decode(await p.output());
   const stderr = new TextDecoder().decode(await p.stderrOutput());
   p.close();
   return {
     output,
     stderr,
+    status,
   };
 }
 
 Rhum.testPlan("tests/depcheck_test.ts", () => {
-  Rhum.afterEach(() => {
-    resetExampleProjectDir();
-  });
   Rhum.testSuite("Running with no args", () => {
     Rhum.testCase(
       "Warnings about unused dependencies are correct",
       async () => {
-        const { output, stderr } = await run(
+        const { output, stderr, status } = await run(
           ["deno", "run", "--allow-read=.", "../../mod.ts"],
           "./tests/example_project",
         );
+        Rhum.asserts.assertEquals(status.success, false);
+        Rhum.asserts.assertEquals(status.code, 1);
         Rhum.asserts.assertEquals(output, "");
         Rhum.asserts.assertEquals(
           stderr,
