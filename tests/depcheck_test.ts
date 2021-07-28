@@ -1,17 +1,6 @@
 import { Rhum } from "./deps.ts";
 import { colours } from "../deps.ts";
 
-function resetExampleProjectDir() {
-  Deno.copyFileSync(
-    "./tests/example_project_baseline/deps.ts",
-    "tests/example_project/deps.ts",
-  );
-  Deno.copyFileSync(
-    "./tests/example_project_baseline/tests/deps.ts",
-    "tests/example_project/tests/deps.ts",
-  );
-}
-
 async function run(
   cmd: string[],
   cwd: string,
@@ -36,9 +25,6 @@ async function run(
 }
 
 Rhum.testPlan("tests/depcheck_test.ts", () => {
-  Rhum.afterEach(() => {
-    resetExampleProjectDir();
-  });
   Rhum.testSuite("Running with no args", () => {
     Rhum.testCase(
       "Warnings about unused dependencies are correct",

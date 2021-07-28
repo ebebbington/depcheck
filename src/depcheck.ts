@@ -134,7 +134,7 @@ function getDepFileContent(filename: string): string[] {
   const content = dataStr.split(
     "\n",
     // Catch for an empty deps file, eg `mainDepsContent` is [""] when an empty file
-  ).filter((line) => line.trim() !== "" && line.startsWith("//"));
+  ).filter((line) => line.trim() !== "" && !line.startsWith("//"));
   return content;
 }
 
