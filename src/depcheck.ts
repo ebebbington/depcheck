@@ -1,7 +1,6 @@
 import { colours } from "../deps.ts";
 
 const decoder = new TextDecoder();
-const encoder = new TextEncoder();
 
 type Imports = Array<
   { name: string; isUsed: boolean; file: string; regex: RegExp }
@@ -147,16 +146,6 @@ async function iterateOverDirectoryAndCheckIfImportsAreUsed(
   return imports;
 }
 
-const args = Deno.args;
-
-if (args.indexOf("--fmt") >= 0) {
-  const p = Deno.run({
-    cmd: ["deno", "fmt"],
-  });
-  await p.status();
-  p.close();
-}
-
 let allImports: Imports = [];
 
 // Catch for an empty deps file, eg `mainDepsContent` is [""] when an empty file
@@ -208,29 +197,3 @@ allImports.forEach((imp) => {
     );
   }
 });
-
-// And if --clean is passed in, remove these unused imports from the files
-if (args[0] === "--clean") {
-  allImports.forEach((imp) => {
-    if (imp.isUsed === false) {
-      const fileContent = decoder.decode(Deno.readFileSync(imp.file)).split(
-        "\n",
-      );
-      fileContent.forEach((line, i) => {
-        if (line.match(imp.regex)) {
-          fileContent.splice(i, 1);
-        }
-      });
-      // cleanup empty lines at top of file
-      while (true) {
-        if (fileContent[0] === "") {
-          fileContent.splice(0, 1);
-        } else {
-          break;
-        }
-      }
-      Deno.writeFileSync(imp.file, encoder.encode(fileContent.join("\n")));
-    }
-  });
-  console.info(colours.green("Cleaned up all unused imports"));
-}
