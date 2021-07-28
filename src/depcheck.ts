@@ -131,11 +131,10 @@ async function iterateOverDirectoryAndCheckIfImportsAreUsed(
 function getDepFileContent(filename: string): string[] {
   const data = Deno.readFileSync(filename);
   const dataStr = decoder.decode(data);
-  const content = dataStr.split(
+  return dataStr.split(
     "\n",
     // Catch for an empty deps file, eg `mainDepsContent` is [""] when an empty file
   ).filter((line) => line.trim() !== "" && !line.startsWith("//"));
-  return content;
 }
 
 const allImports: Imports = [];
