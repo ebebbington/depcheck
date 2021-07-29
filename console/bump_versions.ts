@@ -10,7 +10,7 @@ let readmeContent = new TextDecoder().decode(
   await Deno.readFileSync("./README.md"),
 );
 readmeContent = readmeContent.replace(
-  /depcheck@v[0-9\.]+[0-9\.]+[0-9\.]/,
+  /depcheck@v[0-9\.]+[0-9\.]+[0-9\.]/g,
   `depcheck@v${version}`,
 );
 await Deno.writeFile("./README.md", new TextEncoder().encode(readmeContent));

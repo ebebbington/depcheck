@@ -137,9 +137,9 @@ function getDepFileContent(filename: string): string[] {
   ).filter((line) => line.trim() !== "" && !line.startsWith("//"));
 }
 
+const mainDepsFilename = Deno.args[0] ?? "deps.ts";
 const allImports: Imports = [];
-
-const mainDepsContent = getDepFileContent("./deps.ts");
+const mainDepsContent = getDepFileContent(mainDepsFilename);
 for (
   const mainImport of gatherImportsFromDepContent(mainDepsContent, "deps.ts")
 ) {

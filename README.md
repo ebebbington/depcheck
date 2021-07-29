@@ -45,6 +45,13 @@ dependencies used in `deps.ts` and `tests/deps.ts`/`test/deps.ts` (if either
 exist), and check if each one is used within your project, returning a response
 of if any dependencies are unused.
 
+Alternatively, you can pass in an argument to explicitely tell depcheck to check
+that file. Depcheck will still try check a tests `deps.ts` automatically:
+
+```
+$ deno run --allow-read ='.' https://deno.land/x/depcheck/v2.0.0/mod.ts deps.js
+```
+
 ## License
 
 By contributing your code, you agree to license your contribution under the
