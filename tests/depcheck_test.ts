@@ -55,6 +55,36 @@ Rhum.testPlan("tests/depcheck_test.ts", () => {
     );
   });
 
+  Rhum.testSuite("Running with args", () => {
+    Rhum.testCase(
+      "Warnings about unused dependencies are correct",
+      async () => {
+        const { output, stderr, status } = await run(
+          ["deno", "run", "--allow-read=.", "../../mod.ts", "deps.ts"],
+          "./tests/example_project",
+        );
+        Rhum.asserts.assertEquals(status.success, false);
+        Rhum.asserts.assertEquals(status.code, 1);
+        Rhum.asserts.assertEquals(output, "");
+        Rhum.asserts.assertEquals(
+          stderr,
+          colours.yellow(
+            'Import "byee" is unused, originating from "deps.ts"',
+          ) + "\n" +
+            colours.yellow(
+              'Import "good" is unused, originating from "deps.ts"',
+            ) + "\n" +
+            colours.yellow(
+              'Import "some" is unused, originating from "tests/deps.ts"',
+            ) + "\n" +
+            colours.yellow(
+              'Import "something" is unused, originating from "tests/deps.ts"',
+            ) + "\n",
+        );
+      },
+    );
+  });
+
   Rhum.testSuite("User has no dependency files", () => {
     Rhum.testCase("Should do nothing", async () => {
       const p = Deno.run({
