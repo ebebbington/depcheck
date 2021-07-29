@@ -32,7 +32,7 @@
 ## Quick Start
 
 ```
-$ deno run --allow-read='.' https://deno.land/x/depcheck@v1.0.1/mod.ts
+$ deno run --allow-read='.' https://deno.land/x/depcheck@v2.1.0/mod.ts
 ```
 
 You can even use this as a step in your CI, as if unused dependencies are found,
