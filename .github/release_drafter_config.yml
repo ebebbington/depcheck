@@ -49,11 +49,11 @@ template: |
 
   * Run the latest release by using the following in your project(s):
     ```typescript
-    deno run --allow-read='.' --allow-write='.' https://deno.land/x/depcheck@v$RESOLVED_VERSION/mod.ts
+    deno run --allow-read='.' https://deno.land/x/depcheck@v$RESOLVED_VERSION/mod.ts
     ```
   * Or install:
     ```
-    deno install -f --allow-read='.' --allow-write='.' https://deno.land/x/depcheck@$RESOLVED_VERSION/mod.ts
+    deno install -f --allow-read='.' https://deno.land/x/depcheck@$RESOLVED_VERSION/mod.ts
     ```
 
   __Updates__
