@@ -32,7 +32,7 @@
 ## Quick Start
 
 ```
-$ deno run --allow-read='.' https://deno.land/x/depcheck@v1.0.1/mod.ts
+$ deno run --allow-read='.' https://deno.land/x/depcheck@v2.1.0/mod.ts
 ```
 
 You can even use this as a step in your CI, as if unused dependencies are found,
@@ -49,7 +49,7 @@ Alternatively, you can pass in an argument to explicitely tell depcheck to check
 that file. Depcheck will still try check a tests `deps.ts` automatically:
 
 ```
-$ deno run --allow-read ='.' https://deno.land/x/depcheck/v2.0.0/mod.ts deps.js
+$ deno run --allow-read ='.' https://deno.land/x/depcheck@v2.0.0/mod.ts deps.js
 ```
 
 ## License
