@@ -49,7 +49,7 @@ Alternatively, you can pass in an argument to explicitely tell depcheck to check
 that file. Depcheck will still try check a tests `deps.ts` automatically:
 
 ```
-$ deno run --allow-read ='.' https://deno.land/x/depcheck/v2.0.0/mod.ts deps.js
+$ deno run --allow-read ='.' https://deno.land/x/depcheck@v2.0.0/mod.ts deps.js
 ```
 
 ## License
