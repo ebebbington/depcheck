@@ -1,3 +1,3 @@
 export const Something = {
-  version: import.meta.url
-}
+  version: import.meta.url,
+};
