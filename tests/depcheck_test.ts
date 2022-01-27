@@ -1,5 +1,5 @@
 import { colours } from "../deps.ts";
-import { assertEquals } from "./deps.ts"
+import { assertEquals } from "./deps.ts";
 
 async function warningsAboutUnusedFilesAreCorrect(args: string[]) {
   const { output, stderr, status } = await run(
@@ -49,19 +49,19 @@ async function run(
   };
 }
 
-Deno.test("Running with no args", async t => {
-  await t.step('Warnings about unused dependencies are correct', async () => {
+Deno.test("Running with no args", async (t) => {
+  await t.step("Warnings about unused dependencies are correct", async () => {
     await warningsAboutUnusedFilesAreCorrect([
       "deno",
       "run",
       "--allow-read=.",
       "../../mod.ts",
     ]);
-  })
-})
+  });
+});
 
-Deno.test("Running with args", async t => {
-  await t.step('Warnings about unused dependencies are correct', async () => {
+Deno.test("Running with args", async (t) => {
+  await t.step("Warnings about unused dependencies are correct", async () => {
     await warningsAboutUnusedFilesAreCorrect([
       "deno",
       "run",
@@ -69,11 +69,11 @@ Deno.test("Running with args", async t => {
       "../../mod.ts",
       "deps.ts",
     ]);
-  })
-})
+  });
+});
 
-Deno.test("User has no dependency files", async t => {
-  await t.step('Should do nothing', async () => {
+Deno.test("User has no dependency files", async (t) => {
+  await t.step("Should do nothing", async () => {
     const p = Deno.run({
       cmd: ["deno", "run", "--allow-read=.", "../../../mod.ts"],
       cwd: "./tests/example_project/src",
@@ -88,5 +88,5 @@ Deno.test("User has no dependency files", async t => {
       stderr.indexOf("No such file or directory") > -1,
       true,
     );
-  })
-})
+  });
+});
