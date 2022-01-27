@@ -92,7 +92,7 @@ Rhum.testPlan("tests/depcheck_test.ts", () => {
       const stderr = new TextDecoder().decode(await p.stderrOutput());
       p.close();
       Rhum.asserts.assertEquals(
-        stderr.includes('system cannot find the file specified'),
+        stderr.indexOf("No such file or directory") > -1,
         true,
       );
     });
