@@ -16,6 +16,9 @@
   <a href="https://sonarcloud.io/dashboard?id=ebebbington_depcheck">
     <img src="https://sonarcloud.io/api/project_badges/measure?project=ebebbington_depcheck&metric=alert_status">
   </a>
+  <a href="https://codecov.io/gh/ebebbington/depcheck">
+    <img src="https://codecov.io/gh/ebebbington/depcheck/branch/master/graph/badge.svg?token=2Q9FTJ94RK"/>
+  </a>
 </p>
 
 ---
