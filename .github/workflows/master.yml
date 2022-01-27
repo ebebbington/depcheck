@@ -20,10 +20,20 @@ jobs:
         with:
           deno-version: vx.x.x
 
+      - name: Test Permissions
+        run: deno run --allow-read='.' mod.ts
+
       - name: Tests
         run: |
           deno cache mod.ts
-          deno test -A tests/depcheck_test.ts
+          deno test -A --coverage=cov_profile tests/depcheck_test.ts
+          deno coverage --lcov cov_profile > cov.lcov
+      
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v1
+        with:
+          name: depcheck
+          files: cov.lcov
 
   linter:
     # Only one OS is required since fmt is cross platform
