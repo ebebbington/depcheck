@@ -30,7 +30,7 @@ jobs:
           deno coverage --lcov cov_profile > cov.lcov
       
       - name: Upload Coverage
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v2.1.0
         with:
           name: depcheck
           files: cov.lcov
